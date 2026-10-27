@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SimpleWeaponManager : MonoBehaviour
+public class SimpleWeaponManager : MonoBehaviour//中转站作用，负责接收SimplePlayerShooting里玩家的鼠标输入，并转给SimpleWeaponController
 {
     [SerializeField]
     private SimpleWeaponController currentWeapon;
@@ -10,7 +10,7 @@ public class SimpleWeaponManager : MonoBehaviour
         if (currentWeapon == null)
             return;
 
-        currentWeapon.AimAt(targetPosition);
+        currentWeapon.AimAt(targetPosition);//把targetPosition传递到currentWeapon里的AimAt函数
     }
 
     public bool TryFire()
@@ -18,6 +18,6 @@ public class SimpleWeaponManager : MonoBehaviour
         if (currentWeapon == null)
             return false;
 
-        return currentWeapon.TryFire();
+        return currentWeapon.TryFire();//调用SimpleWeaponController里的TryFire
     }
 }

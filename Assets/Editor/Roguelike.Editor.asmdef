@@ -1,0 +1,5 @@
+{
+  "name": "Roguelike.Editor",
+  "references": ["Roguelike.Runtime"],
+  "includePlatforms": ["Editor"]
+}

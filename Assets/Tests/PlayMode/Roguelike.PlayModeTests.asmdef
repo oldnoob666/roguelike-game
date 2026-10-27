@@ -1,0 +1,5 @@
+{
+  "name": "Roguelike.PlayModeTests",
+  "references": ["Roguelike.Runtime"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}
