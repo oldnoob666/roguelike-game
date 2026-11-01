@@ -43,9 +43,9 @@ public class PlayerHealth : MonoBehaviour//挂载在player身上，负责死亡与ui管理
 
         if (healthText != null)
         {
-            healthText.text = $"HP :{health.CurrentHealth} /{ health.MaxHealth}";
+            healthText.text = $"HP :{health.currentHealth} /{ health.MaxHealth}";
         }
-        if(health.CurrentHealth < 30) healthText.color = Color.red;
+        if(health.currentHealth < 30) healthText.color = Color.red;
 
         if (health.IsDead && Input.GetKeyDown(KeyCode.R))//玩家已经死亡并且按下R
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);//等价于Scene currentScene = SceneManager.GetActiveScene();

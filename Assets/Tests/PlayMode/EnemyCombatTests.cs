@@ -63,11 +63,11 @@ public class EnemyCombatTests
         int deaths = 0;
         health.Died += () => deaths++;
         Assert.IsTrue(health.TakeDamage(20, Vector2.right));
-        Assert.AreEqual(80, health.CurrentHealth);
+        Assert.AreEqual(80, health.currentHealth);
         Assert.IsFalse(health.TakeDamage(20, Vector2.right));
         Assert.IsTrue(health.TakeDamage(1000, Vector2.right, true));
         Assert.IsFalse(health.TakeDamage(1000, Vector2.right, true));
-        Assert.AreEqual(0, health.CurrentHealth);
+        Assert.AreEqual(0, health.currentHealth);
         Assert.AreEqual(1, deaths);
     }
 
@@ -77,7 +77,7 @@ public class EnemyCombatTests
     {
         var health = Health();
         Assert.IsFalse(health.TakeDamage(damage, Vector2.zero));
-        Assert.AreEqual(100, health.CurrentHealth);
+        Assert.AreEqual(100, health.currentHealth);
     }
 
     [UnityTest]
@@ -87,7 +87,7 @@ public class EnemyCombatTests
         health.TakeDamage(10, Vector2.right);
         yield return new WaitForSeconds(0.65f);
         Assert.IsTrue(health.TakeDamage(10, Vector2.right));
-        Assert.AreEqual(80, health.CurrentHealth);
+        Assert.AreEqual(80, health.currentHealth);
     }
 
     [UnityTest]
@@ -135,7 +135,7 @@ public class EnemyCombatTests
         enemy.enabled = false;
         var bullet = Bullet(Vector2.zero, Vector2.right);
         yield return new WaitForSeconds(0.2f);
-        Assert.AreEqual(80, enemy.GetComponent<CharacterHealth>().CurrentHealth);
+        Assert.AreEqual(80, enemy.GetComponent<CharacterHealth>().currentHealth);
         Assert.IsTrue(bullet == null);
     }
 
@@ -150,7 +150,7 @@ public class EnemyCombatTests
         typeof(SimpleBullet).GetField("speed", System.Reflection.BindingFlags.NonPublic |
             System.Reflection.BindingFlags.Instance).SetValue(bullet, 1000f);
         yield return new WaitForSeconds(0.1f);
-        Assert.AreEqual(80, enemy.GetComponent<CharacterHealth>().CurrentHealth);
+        Assert.AreEqual(80, enemy.GetComponent<CharacterHealth>().currentHealth);
     }
 
     [UnityTest]
@@ -161,7 +161,7 @@ public class EnemyCombatTests
         enemy.enabled = false;
         var bullet = Bullet(Vector2.zero, Vector2.right);
         yield return new WaitForSeconds(0.25f);
-        Assert.AreEqual(100, enemy.GetComponent<CharacterHealth>().CurrentHealth);
+        Assert.AreEqual(100, enemy.GetComponent<CharacterHealth>().currentHealth);
         Assert.IsTrue(bullet == null);
     }
 
@@ -171,7 +171,7 @@ public class EnemyCombatTests
         var player = Target(Vector2.zero);
         Enemy(Vector2.zero);
         yield return new WaitForSeconds(0.25f);
-        Assert.AreEqual(90, player.GetComponent<CharacterHealth>().CurrentHealth);
+        Assert.AreEqual(90, player.GetComponent<CharacterHealth>().currentHealth);
     }
 
     [UnityTest]
@@ -184,7 +184,7 @@ public class EnemyCombatTests
         Assert.AreEqual(Vector2.zero, enemy.GetComponent<Rigidbody2D>().velocity);
         Assert.IsFalse(enemy.GetComponent<Collider2D>().enabled);
         yield return new WaitForSeconds(0.15f);
-        Assert.AreEqual(100, player.GetComponent<CharacterHealth>().CurrentHealth);
+        Assert.AreEqual(100, player.GetComponent<CharacterHealth>().currentHealth);
     }
 
     [UnityTest]

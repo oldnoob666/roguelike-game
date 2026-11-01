@@ -56,7 +56,7 @@ public class SceneCombatTests
         weapon.AimAt(enemy.GetComponent<Collider2D>().bounds.center);
         Assert.IsTrue(weapon.TryFire());
         yield return new WaitForSeconds(0.5f);
-        Assert.AreEqual(80, enemy.GetComponent<CharacterHealth>().CurrentHealth);
+        Assert.AreEqual(80, enemy.GetComponent<CharacterHealth>().currentHealth);
     }
 
     [UnityTest]

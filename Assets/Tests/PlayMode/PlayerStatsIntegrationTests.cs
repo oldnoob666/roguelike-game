@@ -30,12 +30,12 @@ public class PlayerStatsIntegrationTests
         var health = player.AddComponent<CharacterHealth>();
         player.SetActive(true);
 
-        Assert.AreEqual(150, health.CurrentHealth);
+        Assert.AreEqual(150, health.currentHealth);
         Assert.AreEqual(150, health.MaxHealth);
         health.TakeDamage(10, Vector2.right);
         stats.AddHealth(20);
         Assert.AreEqual(170, health.MaxHealth);
-        Assert.AreEqual(140, health.CurrentHealth, "Maximum health bonuses do not heal the player.");
+        Assert.AreEqual(140, health.currentHealth, "Maximum health bonuses do not heal the player.");
     }
 
     [Test]
@@ -49,7 +49,7 @@ public class PlayerStatsIntegrationTests
 
         Assert.IsTrue(health.TakeDamage(10, Vector2.right));
         Assert.IsTrue(health.TakeDamage(10, Vector2.right));
-        Assert.AreEqual(80, health.CurrentHealth);
+        Assert.AreEqual(80, health.currentHealth);
     }
 
     [Test]
@@ -94,7 +94,7 @@ public class PlayerStatsIntegrationTests
         Assert.IsTrue(weapon.TryFire());
         stats.AddDamage(10); // Already fired bullets retain their damage at firing time.
         yield return new WaitForSeconds(0.3f);
-        Assert.AreEqual(65, enemy.GetComponent<CharacterHealth>().CurrentHealth);
+        Assert.AreEqual(65, enemy.GetComponent<CharacterHealth>().currentHealth);
         Assert.IsFalse(weapon.TryFire());
         yield return new WaitForSeconds(0.3f);
         Assert.IsTrue(weapon.TryFire());

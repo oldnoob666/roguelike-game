@@ -5,7 +5,7 @@ public class SimpleBullet : MonoBehaviour//在开火成功时被调用，用来�
 {
     [SerializeField] private float speed = 12f;
     [SerializeField] private float lifeTime = 2f;
-    private int damage;//生成时从玩家数值传入，已发射的子弹保留本次伤害
+    private float damage;//生成时从玩家数值传入，已发射的子弹保留本次伤害
 
     private Vector2 direction = Vector2.right;//子弹的移动方向
     private Transform owner;//玩家或敌人，避免子弹击中自己
@@ -19,7 +19,7 @@ public class SimpleBullet : MonoBehaviour//在开火成功时被调用，用来�
         hitbox.isTrigger = true;
     }
 
-    public void Initialize(Vector2 shootingDirection, Transform shooter, int shotDamage)//子弹控制，由weaponController触发
+    public void Initialize(Vector2 shootingDirection, Transform shooter, float shotDamage)//子弹控制，由weaponController触发
     {
         direction = shootingDirection.normalized;
         owner = shooter;
