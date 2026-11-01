@@ -5,17 +5,24 @@ public class EnemyController : MonoBehaviour
 {
     public enum EnemyState { Patrol, Chase, Hurt, Dead }
 
+    [Header("生命")]
+    [SerializeField, Min(1)] private int maxHealth = 100;//敌人最大生命
+    [SerializeField, Min(0f)] private float invulnerableDuration = 0.5f;//敌人受伤后的无敌时间
+
+    public int MaxHealth => maxHealth;
+    public float InvulnerableDuration => invulnerableDuration;
+
     [Header("巡逻")]
-    [SerializeField, Min(0f)] private float patrolSpeed = 1.2f;
-    [SerializeField, Min(0f)] private float patrolRadius = 2f;
-    [SerializeField, Min(0f)] private float waitTime = 1f;
+    [SerializeField, Min(0f)] private float patrolSpeed = 1.2f;//巡逻速度
+    [SerializeField, Min(0f)] private float patrolRadius = 2f;//巡逻圆
+    [SerializeField, Min(0f)] private float waitTime = 1f;//等待时间
 
     [Header("追击")]
     [SerializeField] private PlayerHealth target;
-    [SerializeField, Min(0f)] private float detectionRadius = 6f;
+    [SerializeField, Min(0f)] private float detectionRadius = 6f;//检测玩家的圆半径
     [SerializeField, Min(0f)] private float chaseSpeed = 3f;
     [SerializeField, Min(0f)] private float lostTargetTime = 2f;
-    [SerializeField, Min(0f)] private float stoppingDistance = 0.4f;
+    [SerializeField, Min(0f)] private float stoppingDistance = 0.4f;//？
 
     [Header("战斗")]
     [SerializeField, Min(1)] private int contactDamage = 10;
@@ -43,6 +50,7 @@ public class EnemyController : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         health = GetComponent<CharacterHealth>();
+        health.InitializeEnemy(this);
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         body.gravityScale = 0f;

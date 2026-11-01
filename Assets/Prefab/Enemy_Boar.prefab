@@ -184,8 +184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e71a8f8f95e47b1b930e638f7074c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  invulnerableDuration: 0.12
 --- !u!114 &5360529814105655775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,11 +196,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bda7acbd66394975a3cf88ff6dfd76d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
+  invulnerableDuration: 0.12
   patrolSpeed: 1.2
-  patrolRadius: 3
+  patrolRadius: 2
   waitTime: 1
   target: {fileID: 0}
-  detectionRadius: 7
+  detectionRadius: 10
   chaseSpeed: 4
   lostTargetTime: 2
   stoppingDistance: 0.4

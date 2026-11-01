@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-[RequireComponent(typeof(CharacterHealth))]//？？
+[RequireComponent(typeof(PlayerStats), typeof(CharacterHealth))]//？？
 public class PlayerHealth : MonoBehaviour//挂载在player身上，负责死亡与ui管理
 {
     private CharacterHealth health;

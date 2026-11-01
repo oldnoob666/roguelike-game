@@ -540,7 +540,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 3920360383095713243, guid: 18c3a1ba6d1c2f642b3f4a1a30ed7d14, type: 3}
   muzzlePoint: {fileID: 1854880370}
-  fireCooldown: 0.2
 --- !u!212 &719676813
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -608,6 +607,51 @@ Transform:
   m_Children:
   - {fileID: 1854880370}
   m_Father: {fileID: 1678787868}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &854606544
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 854606546}
+  - component: {fileID: 854606545}
+  m_Layer: 0
+  m_Name: Potion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &854606545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854606544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8ee55352e9ed94388afc03766fb349, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  potionType: 0
+--- !u!4 &854606546
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854606544}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.16747668, y: -0.15043736, z: 0.085385084}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &956337788
 GameObject:
@@ -1229,6 +1273,7 @@ GameObject:
   - component: {fileID: 1678787875}
   - component: {fileID: 1678787873}
   - component: {fileID: 1678787874}
+  - component: {fileID: 1678787876}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -1345,7 +1390,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 1678787869}
   InputDir: {x: 0, y: 0}
-  moveSpeed: 5
 --- !u!114 &1678787871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1431,8 +1475,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e71a8f8f95e47b1b930e638f7074c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  invulnerableDuration: 0.5
+--- !u!114 &1678787876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678787866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02b1f534484ea0645bffc4f16b9a3dbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerBaseSpeed: 10
+  playerBaseHealth: 100
+  playerBaseTakeDamage: 20
+  playerBaseInvulnerableDuration: 0.5
+  fireBaseCooldown: 0.2
 --- !u!1001 &1731848282
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1624,3 +1683,4 @@ SceneRoots:
   - {fileID: 956337791}
   - {fileID: 161715482}
   - {fileID: 1632772878}
+  - {fileID: 854606546}

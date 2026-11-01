@@ -31,12 +31,20 @@ public class EnemyCombatTests
         return obj.AddComponent<PlayerHealth>();
     }
 
+    private CharacterHealth Health()
+    {
+        var obj = Make("Health", Vector2.zero);
+        obj.AddComponent<PlayerStats>();
+        return obj.AddComponent<CharacterHealth>();
+    }
+
     private SimpleBullet Bullet(Vector2 position, Vector2 direction)
     {
         var obj = Make("Bullet", position);
         obj.AddComponent<CircleCollider2D>().radius = 0.1f;
         var bullet = obj.AddComponent<SimpleBullet>();
-        bullet.Initialize(direction);
+        var shooter = Make("Shooter", new Vector2(-100, -100)).AddComponent<PlayerStats>();
+        bullet.Initialize(direction, shooter.transform, shooter.playerTakeDamage);
         return bullet;
     }
 
@@ -51,7 +59,7 @@ public class EnemyCombatTests
     [Test]
     public void DamageHasInvulnerabilityAndDeathOnlyOnce()
     {
-        var health = Make("Health", Vector2.zero).AddComponent<CharacterHealth>();
+        var health = Health();
         int deaths = 0;
         health.Died += () => deaths++;
         Assert.IsTrue(health.TakeDamage(20, Vector2.right));
@@ -67,7 +75,7 @@ public class EnemyCombatTests
     [TestCase(-10)]
     public void NonPositiveDamageDoesNotHealOrHurt(int damage)
     {
-        var health = Make("Health", Vector2.zero).AddComponent<CharacterHealth>();
+        var health = Health();
         Assert.IsFalse(health.TakeDamage(damage, Vector2.zero));
         Assert.AreEqual(100, health.CurrentHealth);
     }
@@ -75,7 +83,7 @@ public class EnemyCombatTests
     [UnityTest]
     public IEnumerator InvulnerabilityExpires()
     {
-        var health = Make("Health", Vector2.zero).AddComponent<CharacterHealth>();
+        var health = Health();
         health.TakeDamage(10, Vector2.right);
         yield return new WaitForSeconds(0.65f);
         Assert.IsTrue(health.TakeDamage(10, Vector2.right));

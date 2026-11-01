@@ -49,7 +49,7 @@ public static class EnemyIntegrationSetup
         hitbox.size = new Vector2(1.7f, 1.05f);
         hitbox.offset = new Vector2(-0.1f, 0.65f);
         prototype.AddComponent<EnemyController>();
-        var healthSettings = new SerializedObject(prototype.GetComponent<CharacterHealth>());
+        var healthSettings = new SerializedObject(prototype.GetComponent<EnemyController>());
         healthSettings.FindProperty("invulnerableDuration").floatValue = 0.12f;
         healthSettings.ApplyModifiedPropertiesWithoutUndo();
         var prefab = PrefabUtility.SaveAsPrefabAsset(prototype, PrefabPath);

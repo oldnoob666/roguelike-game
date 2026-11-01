@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerStats))]
 public class Player : MonoBehaviour
 {
     public PlayerInputControl playerInput;
     public Rigidbody2D rb;
     public Vector2 InputDir;
-    public float moveSpeed = 5f;
+    private PlayerStats playerStats;
 
 
     private void Awake()
     {
+        playerStats = GetComponent<PlayerStats>();
         playerInput = new PlayerInputControl();//创建一个新的PlayerInputControl实例
     }
 
@@ -40,7 +42,7 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        rb.velocity = new Vector2(InputDir.x * moveSpeed, InputDir.y * moveSpeed);
+        rb.velocity = new Vector2(InputDir.x * playerStats.playerSpeed, InputDir.y * playerStats.playerSpeed);
 
     }
 

@@ -4,12 +4,9 @@ using UnityEngine;
 // 玩家和敌人共用的血量组件；只负责扣血和发出通知，不负责移动或动画。
 public class CharacterHealth : MonoBehaviour
 {
-    [SerializeField, Min(1)] private int maxHealth = 100;//最大血量100
-    [SerializeField, Min(0f)] private float invulnerableDuration = 0.5f;//无敌时间
-
     public int CurrentHealth { get; private set; }//当前血量，外部只读（get）不能改数（private set）
-    // 补充：MaxHealth 是只读属性；=> maxHealth 表示读取时返回 maxHealth，外部不能通过该属性赋值。
-    public int MaxHealth => maxHealth;//？？
+    // 玩家数值来自 PlayerStats；敌人数值来自 EnemyController。
+    public int MaxHealth => playerStats != null ? Mathf.Max(1, playerStats.playerHealth) : enemy.MaxHealth;
     public bool IsDead => CurrentHealth <= 0;//做一个判断，如果当前血量小于等于0，返回true，否则返回false
 
     public event Action<Vector2> Damaged;//受伤事件，传递一个Vector2参数，表示受伤的方向
@@ -17,10 +14,21 @@ public class CharacterHealth : MonoBehaviour
 
     // 补充：保存下一次允许受伤的时间点，不是剩余无敌秒数。
     private float nextDamageTime;//用来判断无敌时间的数（不对）
+    private PlayerStats playerStats;
+    private EnemyController enemy;
 
     private void Awake()
     {
-        CurrentHealth = maxHealth;//初始化当前血量为最大血量
+        playerStats = GetComponent<PlayerStats>();
+        if (playerStats != null)
+            CurrentHealth = MaxHealth;//初始化玩家血量
+    }
+
+    // 由敌人的 Awake 调用，也兼容运行时添加 EnemyController 时依赖组件的创建顺序。
+    public void InitializeEnemy(EnemyController enemyController)
+    {
+        enemy = enemyController;
+        CurrentHealth = MaxHealth;//初始化当前血量为最大血量
     }
 
     // hitDirection 是从攻击来源指向受击者的方向。返回值表示这次是否成功扣血。
@@ -33,7 +41,8 @@ public class CharacterHealth : MonoBehaviour
         // 补充：先扣除伤害，再取结果与0中的较大值，保证扣血后的血量不低于0。
         CurrentHealth = Mathf.Max(0, CurrentHealth - damage);//当前血量<0时，选择0
         // 补充：当前时间加无敌持续时间，得到无敌结束的时间点；即使本次忽略无敌，扣血后也会更新它。
-        nextDamageTime = Time.time + invulnerableDuration;//计算无敌
+        float duration = playerStats != null ? playerStats.playerinvulnerableDuration : enemy.InvulnerableDuration;
+        nextDamageTime = Time.time + Mathf.Max(0f, duration);//计算无敌，玩家使用 PlayerStats 中的最新数值
 
         if (IsDead)
             Died?.Invoke();//发送死亡事件
