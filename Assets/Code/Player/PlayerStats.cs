@@ -6,9 +6,9 @@ public class PlayerStats : MonoBehaviour
 {
     public float playerBaseSpeed = 5f;
     public float playerBaseHealth = 100f;
-    public float playerBaseTakeDamage = 20f;//玩家武器伤害
-    public float playerBaseInvulnerableDuration = 0.5f;//无敌时间
-    public float fireBaseCooldown = 0.2f;//冷却间隔
+    public float playerBaseTakeDamage = 20f;//鐜╁姝﹀櫒浼ゅ
+    public float playerBaseInvulnerableDuration = 0.5f;//鏃犳晫鏃堕棿
+    public float fireBaseCooldown = 0.2f;//鍐峰嵈闂撮殧
 
 
     private float speedBonus;
@@ -17,7 +17,7 @@ public class PlayerStats : MonoBehaviour
     private float fireCooldownBonus;
     private float playerBaseinvulnerableDurationBonus;
 
-    public float playerSpeed => playerBaseSpeed + speedBonus;//只读属性，每次调用计算一次，并且在unity面板上不显示
+    public float playerSpeed => playerBaseSpeed + speedBonus;//鍙灞炴�э紝姣忔璋冪敤璁＄畻涓�娆★紝骞朵笖鍦╱nity闈㈡澘涓婁笉鏄剧ず
     public float playerHealth => playerBaseHealth + playerHealthBonus;
     public float playerTakeDamage => playerBaseTakeDamage + playerTakeDamageBonus;
     public float playerinvulnerableDuration => playerBaseInvulnerableDuration + playerBaseinvulnerableDurationBonus;

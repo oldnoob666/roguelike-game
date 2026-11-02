@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         playerStats = GetComponent<PlayerStats>();
-        playerInput = new PlayerInputControl();//创建一个新的PlayerInputControl实例
+        playerInput = new PlayerInputControl();//鍒涘缓涓�涓柊鐨凱layerInputControl瀹炰緥
     }
 
     private void OnEnable()

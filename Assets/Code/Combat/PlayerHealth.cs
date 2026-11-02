@@ -2,13 +2,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-[RequireComponent(typeof(PlayerStats), typeof(CharacterHealth))]//£¿£¿
-public class PlayerHealth : MonoBehaviour//¹ÒÔØÔÚplayerÉíÉÏ£¬¸ºÔğËÀÍöÓëui¹ÜÀí
+[RequireComponent(typeof(PlayerStats), typeof(CharacterHealth))]//ï¼Ÿï¼Ÿ
+public class PlayerHealth : MonoBehaviour//æŒ‚è½½åœ¨playerèº«ä¸Šï¼Œè´Ÿè´£æ­»äº¡ä¸uiç®¡ç†
 {
     private CharacterHealth health;
     [SerializeField] private TMP_Text healthText;
 
-    public bool IsAlive => health != null && !health.IsDead;//**Ã¿´Î¶ÁÈ¡¸ÃÊôĞÔÊ±ÅĞ¶Ï£ºÈç¹ûhealth²»Îª¿Õ»òÕßhealthÀïµÄIsdead²¼¶ûÖµÎªfalse£¬·µ»Øtrue
+    public bool IsAlive => health != null && !health.IsDead;//**æ¯æ¬¡è¯»å–è¯¥å±æ€§æ—¶åˆ¤æ–­ï¼šå¦‚æœhealthä¸ä¸ºç©ºæˆ–è€…healthé‡Œçš„Isdeadå¸ƒå°”å€¼ä¸ºfalseï¼Œè¿”å›true
 
     private void Awake()
     {
@@ -17,25 +17,25 @@ public class PlayerHealth : MonoBehaviour//¹ÒÔØÔÚplayerÉíÉÏ£¬¸ºÔğËÀÍöÓëui¹ÜÀí
 
     private void OnEnable()
     {
-        health.Died += OnDead;//°ÑOndead·½·¨°ó¶¨µ½DiedÊÂ¼ş£¬ËÀÍöÊ±´¥·¢
+        health.Died += OnDead;//æŠŠOndeadæ–¹æ³•ç»‘å®šåˆ°Diedäº‹ä»¶ï¼Œæ­»äº¡æ—¶è§¦å‘
     }
 
     private void OnDisable()
     {
-        health.Died -= OnDead;//ÍË¶©
+        health.Died -= OnDead;//é€€è®¢
     }
 
     private void OnDead()
     {
         
         var player = GetComponent<Player>();
-        if (player != null) player.enabled = false;//ËÀÍöºó¹Ø±ÕÒÆ¶¯×é¼ş
+        if (player != null) player.enabled = false;//æ­»äº¡åå…³é—­ç§»åŠ¨ç»„ä»¶
 
         var shooting = GetComponent<SimplePlayerShooting>();
-        if (shooting != null) shooting.enabled = false;//¹Ø±ÕÉä»÷×é¼ş
+        if (shooting != null) shooting.enabled = false;//å…³é—­å°„å‡»ç»„ä»¶
 
         var body = GetComponent<Rigidbody2D>();
-        if (body != null) body.velocity = Vector2.zero;//ÉèÖÃ×İÏò£¬ºáÏòËÙ¶ÈÎª0£¬Á¢¿ÌÍ£Ö¹ÒÆ¶¯
+        if (body != null) body.velocity = Vector2.zero;//è®¾ç½®çºµå‘ï¼Œæ¨ªå‘é€Ÿåº¦ä¸º0ï¼Œç«‹åˆ»åœæ­¢ç§»åŠ¨
     }
 
     private void Update()
@@ -47,13 +47,13 @@ public class PlayerHealth : MonoBehaviour//¹ÒÔØÔÚplayerÉíÉÏ£¬¸ºÔğËÀÍöÓëui¹ÜÀí
         }
         if(health.currentHealth < 30) healthText.color = Color.red;
 
-        if (health.IsDead && Input.GetKeyDown(KeyCode.R))//Íæ¼ÒÒÑ¾­ËÀÍö²¢ÇÒ°´ÏÂR
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);//µÈ¼ÛÓÚScene currentScene = SceneManager.GetActiveScene();
+        if (health.IsDead && Input.GetKeyDown(KeyCode.R))//ç©å®¶å·²ç»æ­»äº¡å¹¶ä¸”æŒ‰ä¸‹R
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);//ç­‰ä»·äºScene currentScene = SceneManager.GetActiveScene();
                                                                              //int sceneIndex = currentScene.buildIndex;
                                                                              //SceneManager.LoadScene(sceneIndex);
     }
 
-    private void OnGUI()//½«½ÇÉ«ÑªÁ¿ÔÚuiÉÏ¼òÒ×ÏÔÊ¾
+    private void OnGUI()//å°†è§’è‰²è¡€é‡åœ¨uiä¸Šç®€æ˜“æ˜¾ç¤º
     {
         
         if (health.IsDead)

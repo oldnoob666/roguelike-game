@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class SimplePlayerShooting : MonoBehaviour//Õâ¸ö½Å±¾¸ºÔğ½ÓÊÕÍæ¼ÒµÄÊó±êÒÆ¶¯ÊäÈë£¬µã»÷ÊäÈë
+public class SimplePlayerShooting : MonoBehaviour//è¿™ä¸ªè„šæœ¬è´Ÿè´£æ¥æ”¶ç©å®¶çš„é¼ æ ‡ç§»åŠ¨è¾“å…¥ï¼Œç‚¹å‡»è¾“å…¥
 {
     private Camera mainCamera;
     private SimpleWeaponManager weaponManager;
 
     private void Awake()
     {
-        mainCamera = Camera.main;//»ñÈ¡Ö÷ÉãÏñ»ú£¬ÒÔ±ã½«Êó±êÎ»ÖÃ×ª»»ÎªÊÀ½ç×ø±ê£¨2DÉä»÷£©
-        weaponManager = GetComponent<SimpleWeaponManager>();//»ñÈ¡SimpleWeaponManager×é¼ş£¬ÒÔ±ãÍ¨¹ı¸Ã×é¼ş¿ØÖÆÎäÆ÷µÄÃé×¼ºÍÉä»÷
+        mainCamera = Camera.main;//è·å–ä¸»æ‘„åƒæœºï¼Œä»¥ä¾¿å°†é¼ æ ‡ä½ç½®è½¬æ¢ä¸ºä¸–ç•Œåæ ‡ï¼ˆ2Då°„å‡»ï¼‰
+        weaponManager = GetComponent<SimpleWeaponManager>();//è·å–SimpleWeaponManagerç»„ä»¶ï¼Œä»¥ä¾¿é€šè¿‡è¯¥ç»„ä»¶æ§åˆ¶æ­¦å™¨çš„ç„å‡†å’Œå°„å‡»
     }
 
     private void Update()
@@ -17,13 +17,13 @@ public class SimplePlayerShooting : MonoBehaviour//Õâ¸ö½Å±¾¸ºÔğ½ÓÊÕÍæ¼ÒµÄÊó±êÒÆ¶
             return;
 
         Vector3 mousePosition =
-            mainCamera.ScreenToWorldPoint(Input.mousePosition);//°ÑÊó±êµÄÊÀ½ç×ø±ê¸³Öµ¸ømousePosition
+            mainCamera.ScreenToWorldPoint(Input.mousePosition);//æŠŠé¼ æ ‡çš„ä¸–ç•Œåæ ‡èµ‹å€¼ç»™mousePosition
 
-        weaponManager.AimAt(mousePosition);//°ÑmousePosition´«µİµ½weaponManagerÀïµÄAimAtº¯Êı
+        weaponManager.AimAt(mousePosition);//æŠŠmousePositionä¼ é€’åˆ°weaponManageré‡Œçš„AimAtå‡½æ•°
 
         if (Input.GetMouseButton(0))
         {
-            weaponManager.TryFire();//Èç¹û°´Êó±ê×ó¼ü£¬´¥·¢weaponManagerµÄTryFireº¯Êı
+            weaponManager.TryFire();//å¦‚æœæŒ‰é¼ æ ‡å·¦é”®ï¼Œè§¦å‘weaponManagerçš„TryFireå‡½æ•°
         }
     }
 }

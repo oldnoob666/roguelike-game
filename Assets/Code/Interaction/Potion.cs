@@ -31,7 +31,7 @@ public class Potion : MonoBehaviour
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             UsePotion();
-            Debug.Log("´¥·¢");
+            Debug.Log("è§¦å‘");
             Destroy(gameObject);
         }
         else
@@ -66,7 +66,7 @@ public class Potion : MonoBehaviour
         }
     }
 
-    //´¥·¢¸÷Ò©Æ¿µÄ¾ßÌåÂß¼­µ¥¶ÀĞ´£¡£¡
+    //è§¦å‘å„è¯ç“¶çš„å…·ä½“é€»è¾‘å•ç‹¬å†™ï¼ï¼
 
     public void HealthPo(float amount)
     {

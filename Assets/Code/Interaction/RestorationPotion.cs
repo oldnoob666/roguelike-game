@@ -26,7 +26,7 @@ public class RestorationPotion : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             UsePotion();
-            Debug.Log("¥•∑¢");
+            Debug.Log("Ëß¶Âèë");
             Destroy(gameObject);
         }
     }
