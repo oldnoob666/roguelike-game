@@ -27,6 +27,10 @@ public class CharacterHealth : MonoBehaviour
     public void RestoreHealth(float amount)
     {
         currentHealth += amount;
+        if (currentHealth > MaxHealth)
+        {
+            currentHealth = MaxHealth;//防止currentHealth越界
+        }
     }
 
 

@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(CharacterHealth))]
 public class EnemyController : MonoBehaviour
 {
-    public enum EnemyState { Patrol, Chase, Hurt, Dead }
+    public enum EnemyState { Patrol, Chase, Hurt, Dead }//巡逻，追击，受伤，死亡
 
     [Header("生命")]
     [SerializeField, Min(1)] private int maxHealth = 100;//敌人最大生命
@@ -33,18 +33,37 @@ public class EnemyController : MonoBehaviour
 
     public EnemyState CurrentState { get; private set; }
 
+    // 状态类通过这些只读属性使用配置，Inspector 中的字段仍保留在控制器里。
+    internal Rigidbody2D Body => body;
+    internal Vector2 HomePosition => homePosition;
+    internal Vector2 LastSeenPosition => lastSeenPosition;
+    internal float PatrolSpeed => patrolSpeed;
+    internal float PatrolRadius => patrolRadius;
+    internal float WaitTime => waitTime;
+    internal float ChaseSpeed => chaseSpeed;
+    internal float StoppingDistance => stoppingDistance;
+    internal float HurtDuration => hurtDuration;
+    internal float KnockbackSpeed => knockbackSpeed;
+    internal float DeathDelay => deathDelay;
+    internal bool FoundPlayer { get; private set; }
+    internal bool RemembersPlayer => target != null && target.IsAlive &&
+        Time.time - lastSeenTime < lostTargetTime;
+
     private Rigidbody2D body;
     private CharacterHealth health;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     private Vector2 homePosition;
-    private Vector2 patrolPoint;
     private Vector2 lastSeenPosition;
-    private float waitUntil;
     private float lastSeenTime;
-    private float hurtUntil;
     private float nextContactTime;
     private float nextTargetSearchTime;
+
+    private EnemyStateBase currentState;
+    private EnemyPatrolState patrolState;
+    private EnemyChaseState chaseState;
+    private EnemyHurtState hurtState;
+    private EnemyDeadState deadState;
 
     private void Awake()
     {
@@ -56,7 +75,13 @@ public class EnemyController : MonoBehaviour
         body.gravityScale = 0f;
         body.freezeRotation = true;
         homePosition = body.position;
-        patrolPoint = homePosition;
+
+        // 每只敌人各自创建状态对象，不需要把状态脚本挂到 GameObject 上。
+        patrolState = new EnemyPatrolState(this);
+        chaseState = new EnemyChaseState(this);
+        hurtState = new EnemyHurtState(this);
+        deadState = new EnemyDeadState(this);
+        SwitchState(EnemyState.Patrol);
     }
 
     private void OnEnable()
@@ -82,40 +107,27 @@ public class EnemyController : MonoBehaviour
             nextTargetSearchTime = Time.time + 0.5f;
         }
 
-        bool foundPlayer = target != null && target.IsAlive &&
+        FoundPlayer = target != null && target.IsAlive &&
             Vector2.Distance(body.position, target.transform.position) <= detectionRadius;
 
-        if (foundPlayer)
+        if (FoundPlayer)
         {
             lastSeenPosition = target.transform.position;
             lastSeenTime = Time.time;
         }
 
-        if (CurrentState == EnemyState.Hurt && Time.time < hurtUntil) return;
-
-        if (foundPlayer || (CurrentState != EnemyState.Patrol && target != null &&
-            target.IsAlive && Time.time - lastSeenTime < lostTargetTime))
-            SwitchState(EnemyState.Chase);
-        else
-            SwitchState(EnemyState.Patrol);
-
-        if (CurrentState == EnemyState.Patrol &&
-            Vector2.Distance(body.position, patrolPoint) < 0.15f && Time.time >= waitUntil)
-        {
-            patrolPoint = homePosition + Random.insideUnitCircle * patrolRadius;
-            waitUntil = Time.time + waitTime;
-        }
+        currentState.LogicUpdate();
     }
 
     private void FixedUpdate()
     {
-        if (CurrentState == EnemyState.Dead || CurrentState == EnemyState.Hurt) return;
+        currentState.PhysicsUpdate();
+    }
 
-        Vector2 destination = CurrentState == EnemyState.Chase ? lastSeenPosition : patrolPoint;
+    // 公共移动能力：具体目标、速度和等待条件由当前状态决定。
+    internal void MoveTowards(Vector2 destination, float speed, float stopDistance, bool waiting = false)
+    {
         Vector2 offset = destination - body.position;
-        float stopDistance = CurrentState == EnemyState.Chase ? stoppingDistance : 0.15f;
-        bool waiting = CurrentState == EnemyState.Patrol && Time.time < waitUntil;
-        float speed = CurrentState == EnemyState.Chase ? chaseSpeed : patrolSpeed;
 
         // velocity 的单位是“单位/秒”，这里不乘 Time.deltaTime。
         body.velocity = waiting || offset.magnitude <= stopDistance ?
@@ -124,43 +136,50 @@ public class EnemyController : MonoBehaviour
         if (spriteRenderer != null && Mathf.Abs(body.velocity.x) > 0.01f)
             spriteRenderer.flipX = body.velocity.x > 0f; // 原野猪贴图默认朝左。
 
-        if (animator != null && animator.runtimeAnimatorController != null)
-        {
-            animator.SetBool("walk", CurrentState == EnemyState.Patrol && body.velocity.sqrMagnitude > 0.01f);
-            animator.SetBool("run", CurrentState == EnemyState.Chase && body.velocity.sqrMagnitude > 0.01f);
-        }
+        SetAnimationBool("walk", CurrentState == EnemyState.Patrol && body.velocity.sqrMagnitude > 0.01f);
+        SetAnimationBool("run", CurrentState == EnemyState.Chase && body.velocity.sqrMagnitude > 0.01f);
     }
 
-    private void SwitchState(EnemyState state)
+    internal void SetAnimationBool(string parameter, bool value)
     {
-        if (CurrentState == state) return;
-        CurrentState = state;
-        if (state == EnemyState.Patrol)
+        if (animator != null && animator.runtimeAnimatorController != null)
+            animator.SetBool(parameter, value);
+    }
+
+    internal void TriggerAnimation(string parameter)
+    {
+        if (animator != null && animator.runtimeAnimatorController != null)
+            animator.SetTrigger(parameter);
+    }
+
+    internal void SwitchState(EnemyState state)
+    {
+        if (currentState != null && CurrentState == state) return;
+
+        EnemyStateBase newState = state switch
         {
-            patrolPoint = homePosition;
-            waitUntil = Time.time;
-        }
+            EnemyState.Patrol => patrolState,
+            EnemyState.Chase => chaseState,
+            EnemyState.Hurt => hurtState,
+            EnemyState.Dead => deadState,
+            _ => throw new System.ArgumentOutOfRangeException(nameof(state), state, null)
+        };
+
+        currentState?.OnExit();
+        currentState = newState;
+        CurrentState = state;
+        currentState.OnEnter();
     }
 
     private void OnHurt(Vector2 hitDirection)
     {
         SwitchState(EnemyState.Hurt);
-        hurtUntil = Time.time + hurtDuration;
-        body.velocity = hitDirection * knockbackSpeed;
-        if (animator != null && animator.runtimeAnimatorController != null)
-            animator.SetTrigger("hurt");
+        hurtState.ApplyHit(hitDirection);
     }
 
     private void OnDead()
     {
         SwitchState(EnemyState.Dead);
-        body.velocity = Vector2.zero;
-        foreach (var hitbox in GetComponentsInChildren<Collider2D>())
-            hitbox.enabled = false;
-        if (animator != null && animator.runtimeAnimatorController != null)
-            animator.SetBool("dead", true);
-        // 即使没有动画，或者动画事件丢失，也保证能销毁尸体。
-        Destroy(gameObject, deathDelay);
     }
 
     private void OnTriggerStay2D(Collider2D other)
