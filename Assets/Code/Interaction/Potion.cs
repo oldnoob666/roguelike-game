@@ -31,7 +31,7 @@ public class Potion : MonoBehaviour
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             UsePotion();
-            Debug.Log("触发");
+           
             Destroy(gameObject);
         }
         else

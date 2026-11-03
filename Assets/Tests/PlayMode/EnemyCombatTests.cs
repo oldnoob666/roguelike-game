@@ -57,6 +57,35 @@ public class EnemyCombatTests
     }
 
     [Test]
+    public void StandaloneHealthSupportsDamageHealingAndDeath()
+    {
+        var health = Make("Box", Vector2.zero).AddComponent<CharacterHealth>();
+        Assert.AreEqual(100, health.currentHealth);
+        Assert.AreEqual(100, health.MaxHealth);
+        int deaths = 0;
+        health.Died += () => deaths++;
+
+        Assert.IsTrue(health.TakeDamage(20, Vector2.right));
+        Assert.AreEqual(80, health.currentHealth);
+        health.RestoreHealth(100);
+        Assert.AreEqual(100, health.currentHealth);
+        Assert.IsTrue(health.TakeDamage(1000, Vector2.right, true));
+        Assert.AreEqual(1, deaths);
+    }
+
+    [TestCase(40, 40)]
+    [TestCase(0, 1)]
+    [TestCase(-10, 1)]
+    public void StandaloneHealthCanInitializeItsOwnMaximum(float maximum, float expected)
+    {
+        var health = Make("Box", Vector2.zero).AddComponent<CharacterHealth>();
+        health.InitializeHealth(maximum);
+        Assert.AreEqual(expected, health.MaxHealth);
+        Assert.AreEqual(expected, health.currentHealth);
+        Assert.IsFalse(health.IsDead);
+    }
+
+    [Test]
     public void DamageHasInvulnerabilityAndDeathOnlyOnce()
     {
         var health = Health();

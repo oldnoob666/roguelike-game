@@ -5,7 +5,7 @@ public class SimpleBullet : MonoBehaviour//在开火成功时被调用，用来�
 {
     [SerializeField] private float speed = 12f;
     [SerializeField] private float lifeTime = 2f;
-    private float damage;//生成时从玩家数值传入，已发射的子弹保留本次伤害
+    private float damage;//在Initialize脚本赋值，由SimpleWeaponController传入值
 
     private Vector2 direction = Vector2.right;//子弹的移动方向
     private Transform owner;//玩家或敌人，避免子弹击中自己
@@ -65,8 +65,13 @@ public class SimpleBullet : MonoBehaviour//在开火成功时被调用，用来�
         }
         else if (other.isTrigger || other.GetComponentInParent<PlayerHealth>() != null)//如果碰到触发器或者检测到碰撞物体上有PlayerHealth这个组件，就继续下面的返回false
             return false;
+        else if(other.GetComponent<CharacterHealth>() != null)
+        {
+            var ObjectHealth = other.GetComponent<CharacterHealth>();
+            ObjectHealth.TakeDamage(damage, direction);
+        }
 
-        spent = true;
+            spent = true;
         Destroy(gameObject);
         return true;
     }
