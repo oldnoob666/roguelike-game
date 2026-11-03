@@ -9,6 +9,7 @@ public class PlayerStats : MonoBehaviour
     public float playerBaseTakeDamage = 20f;//玩家武器伤害
     public float playerBaseInvulnerableDuration = 0.5f;//无敌时间
     public float fireBaseCooldown = 0.2f;//冷却间隔
+    public float bulletsBaseNumber = 50f;//子弹数量
 
 
     private float speedBonus;
@@ -16,12 +17,14 @@ public class PlayerStats : MonoBehaviour
     private float playerTakeDamageBonus;
     private float fireCooldownBonus;
     private float playerBaseinvulnerableDurationBonus;
+    private float bulletsNumberBonus;
 
     public float playerSpeed => playerBaseSpeed + speedBonus;//只读属性，每次调用计算一次，并且在unity面板上不显示
     public float playerHealth => playerBaseHealth + playerHealthBonus;
     public float playerTakeDamage => playerBaseTakeDamage + playerTakeDamageBonus;
     public float playerinvulnerableDuration => playerBaseInvulnerableDuration + playerBaseinvulnerableDurationBonus;
     public float fireCooldown => fireBaseCooldown + fireCooldownBonus;
+    public float bulletsNumber => bulletsBaseNumber + bulletsNumberBonus;
 
     public void AddSpeed(float amount)
     {
@@ -46,6 +49,11 @@ public class PlayerStats : MonoBehaviour
     public void AddInvulnerableDuration(float amount)
     {
         playerBaseinvulnerableDurationBonus += amount;
+    }
+
+    public void AddbulletsNumber(float amount)
+    {
+        bulletsNumberBonus += amount;
     }
 
 }

@@ -7,12 +7,12 @@ public class RestorationPotion : MonoBehaviour
     public enum PotionType
     {
         HealthRestore,
-
+        BulletRestore,
     }
     public PotionType potionType;
     public float addAmount;
     public CharacterHealth health;
-
+    public BulletNumberController bulletNumberControl;
 
     private void Awake()
     {
@@ -35,10 +35,13 @@ public class RestorationPotion : MonoBehaviour
 
     public void UsePotion()
     {
-        switch(potionType)
+        switch (potionType)
         {
             case PotionType.HealthRestore:
                 ReHealth(addAmount);
+                break;
+            case PotionType.BulletRestore:
+                ReBullet(addAmount);
                 break;
         }
     }
@@ -47,4 +50,10 @@ public class RestorationPotion : MonoBehaviour
     {
         health.RestoreHealth(amount);
     }
+
+    public void ReBullet(float amount)
+    {
+        bulletNumberControl.RestoreBullet(amount);
+    }
 }
+

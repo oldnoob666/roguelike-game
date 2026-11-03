@@ -24,6 +24,7 @@ public class SimplePlayerShooting : MonoBehaviour//这个脚本负责接收玩�
         if (Input.GetMouseButton(0))
         {
             weaponManager.TryFire();//如果按鼠标左键，触发weaponManager的TryFire函数
+            
         }
     }
 }

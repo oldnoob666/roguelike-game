@@ -6,13 +6,15 @@ public class Potion : MonoBehaviour
 {
     public PlayerStats playerStats;
     public CharacterHealth health;
+    public BulletNumberController bulletNumberControll;
      public enum PotionType
     {
         HealthUp,
         SpeedUp,
         DamageUp,
         InvulnerableDurationUp,
-        FireCoolDownUp
+        FireCoolDownUp,
+        BulletUp,
     }
 
     public PotionType potionType;
@@ -23,6 +25,7 @@ public class Potion : MonoBehaviour
         GameObject target = GameObject.Find("Player");
         health = target.GetComponent<CharacterHealth>();
         playerStats = target.GetComponent<PlayerStats>();
+        bulletNumberControll = target.GetComponentInChildren<BulletNumberController>();
     }
 
 
@@ -60,7 +63,8 @@ public class Potion : MonoBehaviour
             case PotionType.InvulnerableDurationUp:
                 InvulnerableDurationPo(addAmount);
                 break;
-            default:
+            case PotionType.BulletUp:
+                BulletUpPo(addAmount);
                 break;
 
         }
@@ -95,4 +99,10 @@ public class Potion : MonoBehaviour
     {
         playerStats.AddInvulnerableDuration(amount);
     }    
+
+    public void BulletUpPo(float amount)
+    {
+        playerStats.AddbulletsNumber(amount);
+        bulletNumberControll.RestoreBullet(amount);
+    }
 }
